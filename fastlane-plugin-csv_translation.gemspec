@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-csv_translation'
   spec.version       = Fastlane::CsvTranslation::VERSION
   spec.author        = 'Manish Rathi'
-  spec.email         = 'm.rathi@catawiki.nl'
+  spec.email         = 'manishrathi19902013@gmail.com'
 
   spec.summary       = 'A fastlane plugin to manage translation using a CSV file under git repository. 🚀'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-csv_translation"
+  spec.homepage      = "https://github.com/crazymanish/fastlane-plugin-csv_translation"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)

@@ -5,12 +5,26 @@ module Fastlane
 
   module Helper
     class CsvTranslationHelper
-      # class methods that you define here become available in your action
-      # as `Helper::CsvTranslationHelper.your_method`
-      #
-      def self.show_message
-        UI.message("Hello from the csv_translation plugin helper!")
+
+      def self.fetch_csv_file(params)
+        repository_name = params[:repository_name]
+        branch_name = params[:branch_name]
+
+        # Setup csv_file folder for fresh git clone.
+        csv_file_folder_name = ".fl_clone_csv_file"
+        git_clone_folder = File.join(Dir.pwd, csv_file_folder_name)
+        FileUtils.rm_rf(git_clone_folder) if File.directory?(git_clone_folder)
+        Dir.mkdir(csv_file_folder_name)
+
+        UI.success("Fetching csv file from git repo... ⏳")
+        branch_option = "--branch #{branch_name}" if branch_name != 'HEAD'
+        git_url = "git@github.com:#{repository_name}"
+        Fastlane::Actions::sh("git clone #{git_url.shellescape} #{git_clone_folder.shellescape} --depth 1 -n #{branch_option}")
+        Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git checkout #{branch_name}")
+
+        return git_clone_folder
       end
+
     end
   end
 end
