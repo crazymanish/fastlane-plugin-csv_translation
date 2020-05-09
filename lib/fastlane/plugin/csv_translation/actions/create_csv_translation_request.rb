@@ -10,12 +10,12 @@ module Fastlane
     class CreateCsvTranslationRequestAction < Action
       def self.run(params)
         # fetching csv file
-        csv_file_folder = Helper::CsvTranslationHelper.fetch_csv_file(
+        csv_file_path = Helper::CsvTranslationHelper.csv_file_path(
           repository_name: params[:repository_name],
-          branch_name: params[:branch_name]
+          branch_name: params[:branch_name],
+          file_path: params[:file_path]
         )
 
-        csv_file_path = "#{csv_file_folder}/#{params[:file_path]}"
         csv_payload = params[:payload]
 
         # adding new entry into csv file

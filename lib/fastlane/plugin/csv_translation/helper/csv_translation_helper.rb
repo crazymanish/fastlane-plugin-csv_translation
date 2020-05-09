@@ -6,9 +6,10 @@ module Fastlane
   module Helper
     class CsvTranslationHelper
 
-      def self.fetch_csv_file(params)
+      def self.csv_file_path(params)
         repository_name = params[:repository_name]
         branch_name = params[:branch_name]
+        file_path = params[:file_path]
 
         # Setup csv_file folder for fresh git clone.
         csv_file_folder_name = ".fl_clone_csv_file"
@@ -22,7 +23,7 @@ module Fastlane
         Fastlane::Actions::sh("git clone #{git_url.shellescape} #{git_clone_folder.shellescape} --depth 1 -n #{branch_option}")
         Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git checkout #{branch_name}")
 
-        return git_clone_folder
+        return "#{git_clone_folder}/#{file_path}"
       end
 
     end
