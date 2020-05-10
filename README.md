@@ -18,21 +18,26 @@ A fastlane plugin to manage translation using a CSV file under git repository. ð
 
 ## Example
 
-Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
+You have to **remember to keep your release notes CSV file up-to-date** with translation and let [`fastlane`](https://fastlane.tools) do the rest. 
 
-**Note to author:** Please set up a sample project to make it easy for users to explore what your plugin does. Provide everything that is necessary to try out the plugin in this project (including a sample Xcode/Android project if necessary)
+``` ruby
+desc "Release a iOS appstore build to AppStore iTunesConnect with translated release notes."
+lane :release do
+  gym # Build the app and create .ipa file
+  
+  version_number = get_version_number # Get project version
+  
+  # Get translated release notes
+  release_notes = get_csv_translation_requests(
+            repository_name: "repo_owner/repo",
+            file_path: "release_notes/#{version_number}.csv")
 
-## Run tests for this plugin
+  # TODO: Inject release notes into fastlane meta-data
 
-To run both the tests, and code style validation, run
-
-```
-rake
-```
-
-To automatically fix many of the styling issues, use
-```
-rubocop -a
+  deliver # Upload ipa file to iTunesConnect with localized release notes `meta-data`
+  
+  slack(message: "Hi team, New version #{version_number} is avaliable!) # share on Slack
+end
 ```
 
 ## Issues and Feedback
