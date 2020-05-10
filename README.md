@@ -8,7 +8,6 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 
 ```bash
 fastlane add_plugin csv_translation
-bundle exec fastlane add_plugin csv_translation # If you are using fastlane using Gemfile in your project.
 ```
 
 If you are using fastlane using Gemfile in your project, add it to your project by running:
