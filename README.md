@@ -29,8 +29,9 @@ lane :release do
   
   # Get translated release notes
   release_notes = get_csv_translation_requests(
-            repository_name: "repo_owner/repo",
-            file_path: "release_notes/#{version_number}.csv")
+                    repository_name: "repo_owner/repo",
+                    file_path: "release_notes/#{version_number}.csv"
+                  )
 
   # TODO: Inject release notes into fastlane meta-data
 
