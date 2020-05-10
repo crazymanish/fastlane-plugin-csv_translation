@@ -14,7 +14,14 @@ fastlane add_plugin csv_translation
 
 A fastlane plugin to manage translation using a CSV file under git repository. 🚀
 
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+This plugin is inspired by and based on [Keep a CSV](https://en.wikipedia.org/wiki/Comma-separated_values) under git repository. This CSV file can contains translated details for different locales, which can be defined as CSV headers.
+This plugin opens up an opportunity to automate reading from/writing of any `CSV` file with [`fastlane`](https://fastlane.tools). 
+
+## CSV file (Example)
+`CSV` file must have locale headers, and can have one identifier header. i.e Below CSV supports `"en-US","nl-NL","de-DE","fr-FR","it","es-ES","pt-PT","da","sv","no","zh-Hans","zh-Hant"` and `Ticket` column is the unique identifier column which later will be useful to a delete CSV row 
+
+<img width="1476" alt="Example CSV" src="https://user-images.githubusercontent.com/5364500/81500222-fe912780-92d0-11ea-87a7-952a78b5cdf7.png">
+
 
 ## Example
 
