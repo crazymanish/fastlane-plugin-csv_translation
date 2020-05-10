@@ -22,6 +22,23 @@ This plugin opens up an opportunity to automate reading from/writing of any `CSV
 
 <img width="1476" alt="Example CSV" src="https://user-images.githubusercontent.com/5364500/81500222-fe912780-92d0-11ea-87a7-952a78b5cdf7.png">
 
+## Actions
+`fastlane-plugin-csv_translation` consists of 3 actions enabling you to manipulate `CSV` file from [`fastlane`](https://fastlane.tools).
+
+### 📡get_csv_translation_requests
+Get all the translation info as hash from the CSV file, **print** the `translation_status` if translation_requests found.
+
+``` ruby
+get_csv_translation_requests(
+  repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
+  branch_name: "master", # Specify the CSV git branch name (dafault `master`)
+  file_path: "example.csv",  # Specify the CSV file path under the git repo
+  show_status: true, # Specify the flag whether to show the translation status or not (dafault `true`)
+  show_headers: "Ticket|Timeline" # Specify the CSV headers, will ignored while printing (dafault `Ticket|Timeline`)
+) 
+```
+<img width="794" alt="Translation Status" src="https://user-images.githubusercontent.com/5364500/81500613-8e37d580-92d3-11ea-9f51-fe99e74208bb.png">
+
 
 ## Example
 
@@ -36,10 +53,11 @@ lane :release do
   
   # Get translated release notes
   release_notes = get_csv_translation_requests(
-                    repository_name: "repo_owner/repo",
+                    repository_name: "crazymanish/ios-app-release-notes-csv-repo",
                     file_path: "release_notes/#{version_number}.csv"
                   )
-
+  UI.message("Got the translated release notes 💪🏻") 
+  UI.message(release_notes)
   # TODO: Inject release notes into fastlane meta-data
 
   deliver # Upload ipa file to iTunesConnect with localized release notes `meta-data`
