@@ -11,6 +11,11 @@ fastlane add_plugin csv_translation
 bundle exec fastlane add_plugin csv_translation # If you are using fastlane using Gemfile in your project.
 ```
 
+If you are using fastlane using Gemfile in your project, add it to your project by running:
+```bash
+bundle exec fastlane add_plugin csv_translation 
+```
+
 ## About csv_translation
 
 A fastlane plugin to manage translation using a CSV file under git repository. 🚀
