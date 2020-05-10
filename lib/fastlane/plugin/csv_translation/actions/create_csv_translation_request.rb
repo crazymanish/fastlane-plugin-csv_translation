@@ -85,10 +85,7 @@ module Fastlane
         [
           'create_csv_translation_request(
             repository_name: "fastlane/fastlane",
-            payload: {header_name: "some_value"})',
-          'create_csv_translation_request(
-            repository_name: "fastlane/fastlane",
-            branch_name: "master",
+            file_path: "translation/some_csv_name.csv",
             payload: {header_name: "some_value"})',
           'create_csv_translation_request(
             repository_name: "fastlane/fastlane",

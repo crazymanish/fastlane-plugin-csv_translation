@@ -100,10 +100,7 @@ module Fastlane
         [
           'delete_csv_translation_request(
             repository_name: "fastlane/fastlane",
-            identifier: "some_identifier_value")',
-          'delete_csv_translation_request(
-            repository_name: "fastlane/fastlane",
-            branch_name: "master"),
+            file_path: "translation/some_csv_name.csv",
             identifier: "some_identifier_value")',
           'delete_csv_translation_request(
             repository_name: "fastlane/fastlane",
