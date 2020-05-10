@@ -31,7 +31,7 @@ Get all the translation info as hash from the CSV file, **print** the `translati
 ``` ruby
 get_csv_translation_requests(
   repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
-  file_path: "example.csv",  # Specify the CSV file path under the git repo
+  file_path: "example.csv"  # Specify the CSV file path under the git repo
 ) 
 ```
 
@@ -46,6 +46,18 @@ get_csv_translation_requests(
 ```
 <img width="794" alt="Translation Status" src="https://user-images.githubusercontent.com/5364500/81500613-8e37d580-92d3-11ea-9f51-fe99e74208bb.png">
 
+### 📝 create_csv_translation_request
+Append a new translation request entry inside the CSV file. 
+
+``` ruby
+example_csv_payload = {Ticket: "PRJ-3030", Timeline: "30 April"}
+
+create_csv_translation_request(
+  repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
+  file_path: "example.csv",  # Specify the CSV file path under the git repo
+  payload: example_csv_payload  # Specify the CSV payload
+) 
+```
 
 ## Example
 
