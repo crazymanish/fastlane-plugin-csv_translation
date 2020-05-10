@@ -25,8 +25,15 @@ This plugin opens up an opportunity to automate reading from/writing of any `CSV
 ## Actions
 `fastlane-plugin-csv_translation` consists of 3 actions enabling you to manipulate `CSV` file from [`fastlane`](https://fastlane.tools).
 
-### 📡get_csv_translation_requests
+### 📡 get_csv_translation_requests
 Get all the translation info as hash from the CSV file, **print** the `translation_status` if translation_requests found.
+
+``` ruby
+get_csv_translation_requests(
+  repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
+  file_path: "example.csv",  # Specify the CSV file path under the git repo
+) 
+```
 
 ``` ruby
 get_csv_translation_requests(
