@@ -27,6 +27,14 @@ module Fastlane
 
           # printing csv file translation status
           headers = CSV.open(csv_file_path, &:readline)
+
+          csv_row_identifier = params[:identifier].strip
+          unless csv_row_identifier.empty?
+            translation_requests = translation_requests.select do |translation_request|
+              translation_request.map { |value| value.to_s }.join("").include?(csv_row_identifier)
+            end
+          end
+
           printing_translation_requests = translation_requests.map do |translation_request|
             translation_request.map do |key, value|
               if key.to_s.match?(params[:show_headers])
@@ -76,6 +84,12 @@ module Fastlane
                                        description: "Show CSV headers translation value while printing, (default 'Ticket|Timeline')",
                                        is_string: true,
                                        default_value: "Ticket|Timeline"),
+          FastlaneCore::ConfigItem.new(key: :identifier,
+                                       env_name: "FL_GET_CSV_TRANSLATION_REQUESTS_IDENTIFIER",
+                                       description: "An identifier value of the CSV file row",
+                                       is_string: true,
+                                       optional: true,
+                                       default_value: "")
         ]
       end
 
