@@ -1,6 +1,6 @@
-# csv_translation plugin
+# Fastlane `csv_translation` plugin
 
-[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-csv_translation)
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-csv_translation)  [![Gem Version](https://badge.fury.io/rb/fastlane-plugin-csv_translation.svg)](https://badge.fury.io/rb/fastlane-plugin-csv_translation)  [![Twitter: @manish](https://img.shields.io/badge/contact-@manish-blue.svg?style=flat)](https://twitter.com/manish_rathi_)
 
 ## Getting Started
 
