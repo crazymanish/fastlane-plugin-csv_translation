@@ -18,7 +18,7 @@ This plugin is inspired by and based on [Keep a CSV](https://en.wikipedia.org/wi
 This plugin opens up an opportunity to automate reading from/writing of any `CSV` file with [`fastlane`](https://fastlane.tools). 
 
 ## CSV file (Example)
-`CSV` file must have locale headers, and can have one identifier header. i.e Below CSV supports `"en-US","nl-NL","de-DE","fr-FR","it","es-ES","pt-PT","da","sv","no","zh-Hans","zh-Hant"` and `Ticket` column is the unique identifier column which later will be useful to a delete CSV row 
+`CSV` file must have locale headers, and can have one identifier header. i.e Below CSV supports `en-US, nl-NL, de-DE, fr-FR, it, es-ES, pt-PT, da, sv, no, zh-Hans, zh-Hant` and `Ticket` column is the unique identifier column which later will be useful to a delete CSV row 
 
 <img width="1476" alt="Example CSV" src="https://user-images.githubusercontent.com/5364500/81500222-fe912780-92d0-11ea-87a7-952a78b5cdf7.png">
 
@@ -58,9 +58,9 @@ lane :release do
                   )
   UI.message("Got the translated release notes 💪🏻") 
   UI.message(release_notes)
-  # TODO: Inject release notes into fastlane meta-data
+  # TODO: Inject release notes into fastlane `metadata`
 
-  deliver # Upload ipa file to iTunesConnect with localized release notes `meta-data`
+  deliver # Upload ipa file to iTunesConnect with localized release notes fastlane `metadata`
   
   slack(message: "Hi team, New version #{version_number} is avaliable!) # share on Slack
 end
