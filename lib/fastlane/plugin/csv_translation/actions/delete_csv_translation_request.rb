@@ -12,7 +12,8 @@ module Fastlane
         # fetching csv file
         csv_file_folder = Helper::CsvTranslationHelper.fetch_csv_file(
           repository_name: params[:repository_name],
-          branch_name: params[:branch_name]
+          branch_name: params[:branch_name],
+          feature_branch_name: params[:feature_branch_name]
         )
 
         csv_file_path = "#{csv_file_folder}/#{params[:file_path]}"
@@ -36,9 +37,9 @@ module Fastlane
           git_status = Actions::sh("git status --porcelain")
           is_git_status_clean = git_status.empty?
 
-          # raise exception if translation request not found.
+          # log message if translation request not found.
           if is_git_status_clean
-            UI.user_error!("Please check \"#{csv_row_identifier}\", not found the translation request. 🛑")
+            UI.important("Please check \"#{csv_row_identifier}\", not found the translation request. ⁉️")
           end
 
           git_message = "Deleted translation request: identifier: #{csv_row_identifier}"
@@ -81,6 +82,11 @@ module Fastlane
                                        description: "The branch name to your repository, (default master)",
                                        is_string: true,
                                        default_value: "master"),
+          FastlaneCore::ConfigItem.new(key: :feature_branch_name,
+                                       env_name: "FL_DELETE_CSV_TRANSLATION_REQUEST_FEATURE_BRANCH_NAME",
+                                       description: "The feature branch name for new translation request (Useful if no direct commit allowed in master)",
+                                       is_string: true,
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :file_path,
                                        env_name: "FL_DELETE_CSV_TRANSLATION_REQUEST_FILE_PATH",
                                        description: "The file path to your csv file",
