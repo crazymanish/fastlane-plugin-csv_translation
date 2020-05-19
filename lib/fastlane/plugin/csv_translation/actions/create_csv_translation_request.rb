@@ -10,7 +10,7 @@ module Fastlane
     class CreateCsvTranslationRequestAction < Action
       def self.run(params)
         # fetching csv file
-        csv_file_folder = Helper::CsvTranslationHelper.fetch_csv_file(
+        csv_file_folder = Helper::CsvTranslationHelper.create_feature_branch(
           repository_name: params[:repository_name],
           branch_name: params[:branch_name],
           feature_branch_name: params[:feature_branch_name]

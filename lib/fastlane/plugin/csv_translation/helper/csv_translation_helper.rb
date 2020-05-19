@@ -29,12 +29,11 @@ module Fastlane
         Fastlane::Actions::sh("git clone #{git_url.shellescape} #{git_clone_folder.shellescape} --depth 1 -n #{branch_option}")
         Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git checkout #{branch_name}")
 
-        self.create_feature_branch(params) if params[:feature_branch_name]
-
         return git_clone_folder
       end
 
       def self.create_feature_branch(params)
+        self.fetch_csv_file(params)
         git_clone_folder = self.csv_file_folder_path
 
         # creating and checkout new branch
@@ -43,6 +42,8 @@ module Fastlane
 
         # pushing newly created branch
         Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git push -u origin #{branch_name}")
+
+        return git_clone_folder
       end
 
     end
