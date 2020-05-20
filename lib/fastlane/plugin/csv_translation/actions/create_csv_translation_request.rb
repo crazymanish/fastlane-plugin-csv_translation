@@ -21,12 +21,15 @@ module Fastlane
 
         # adding new entry into csv file
         require 'csv'
-        CSV.open(csv_file_path, 'a+', headers: csv_payload.keys) do |csv|
-          csv << csv_payload.values
+        headers = CSV.open(csv_file_path, &:readline) || csv_payload.keys
+        csv_payload = headers.map { |header| csv_payload[header] || "" }
+
+        CSV.open(csv_file_path, 'a+', headers: headers) do |csv|
+          csv << csv_payload
         end
 
         # creating csv translation request
-        git_message = "New translation request: #{csv_payload}"
+        git_message = "New translation request:\n#{csv_payload}"
         git_commit_info = ""
         Dir.chdir(csv_file_folder) do
           GitCommitAction.run(path: ".", message: git_message)
@@ -92,12 +95,12 @@ module Fastlane
           'create_csv_translation_request(
             repository_name: "fastlane/fastlane",
             file_path: "translation/some_csv_name.csv",
-            payload: {header_name: "some_value"})',
+            payload: {"header_name" => "some_value"})',
           'create_csv_translation_request(
             repository_name: "fastlane/fastlane",
             branch_name: "master",
             file_path: "translation/some_csv_name.csv",
-            payload: {header_name: "some_value"})'
+            payload: {"header_name" => "some_value"})'
         ]
       end
 
