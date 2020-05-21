@@ -55,7 +55,7 @@ get_csv_translation_requests(
 Add a new translation request entry inside the CSV file. It will append a new row in CSV file and then git commit the CSV file changes.
 
 ``` ruby
-example_csv_payload = {Ticket: "PRJ-3030", Timeline: "30 April"}
+example_csv_payload = { "Ticket" => "PRJ-3030", "Timeline" => "30 April" }
 
 create_csv_translation_request(
   repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
@@ -65,7 +65,7 @@ create_csv_translation_request(
 ```
 
 ### 🔝rebase_csv_translation_request
-Rebase a translation request entry inside the CSV file. It will append a new row top of target branch in CSV file and then git commit the CSV file changes.
+Rebase a translation request entry inside the CSV file. It will append a new row top of target branch in CSV file and then git commit the CSV file changes. Very useful in case of resolving conflicts. 
 
 ``` ruby
 rebase_csv_translation_request(
