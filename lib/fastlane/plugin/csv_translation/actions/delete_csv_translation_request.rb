@@ -26,7 +26,7 @@ module Fastlane
         translation_requests = CSV.table(csv_file_path, headers: true)
         translation_requests.delete_if { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
 
-        CSV.open(csv_file_path, "w", write_headers: true, headers: headers) do |csv|
+        CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
           translation_requests.each { |translation_request| csv << translation_request }
         end
 
@@ -40,14 +40,14 @@ module Fastlane
           # log message if translation request not found.
           if is_git_status_clean
             UI.important("Please check \"#{csv_row_identifier}\", not found the translation request. ⁉️")
+          else
+            git_message = "Deleted translation request: identifier: #{csv_row_identifier}"
+            GitCommitAction.run(path: ".", message: git_message)
+            PushToGitRemoteAction.run(remote: "origin")
+            git_commit_info = Actions.last_git_commit_dict
+
+            UI.success("Successfully #{git_message} 🚀")
           end
-
-          git_message = "Deleted translation request: identifier: #{csv_row_identifier}"
-          GitCommitAction.run(path: ".", message: git_message)
-          PushToGitRemoteAction.run(remote: "origin")
-          git_commit_info = Actions.last_git_commit_dict
-
-          UI.success("Successfully #{git_message} 🚀")
         end
 
         # building deleted translation request info
