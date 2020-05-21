@@ -19,12 +19,20 @@ module Fastlane
         csv_file_path = "#{csv_file_folder}/#{params[:file_path]}"
         csv_payload = params[:payload]
 
+        # add missing newline if not present, at the end of the file
+        File.open(csv_file_path, "r+") do |csv|
+          csv.seek(-1, 2)
+
+          if csv.read(1) != "\n"
+            csv.write("\n")
+            csv.seek(0)
+          end
+        end
+
         # adding new entry into csv file
         require 'csv'
-        headers = CSV.open(csv_file_path, &:readline) || csv_payload.keys
-        csv_payload = headers.map { |header| csv_payload[header] || "" }
-
-        CSV.open(csv_file_path, 'a+', headers: headers) do |csv|
+        headers = CSV.open(csv_file_path, &:readline)
+        CSV.open(csv_file_path, 'a', headers: headers, force_quotes: true) do |csv|
           csv << csv_payload
         end
 
