@@ -28,7 +28,7 @@ This plugin opens up an opportunity to automate reading from/writing of any `CSV
 <img width="1476" alt="Example CSV" src="https://user-images.githubusercontent.com/5364500/81500222-fe912780-92d0-11ea-87a7-952a78b5cdf7.png">
 
 ## Actions
-`fastlane-plugin-csv_translation` consists of 3 actions enabling you to manipulate `CSV` file from [`fastlane`](https://fastlane.tools).
+`fastlane-plugin-csv_translation` consists of 4 actions enabling you to manipulate `CSV` file from [`fastlane`](https://fastlane.tools).
 
 ### 📡 get_csv_translation_requests
 Get all the translation info as hash from the CSV file, **print** the `translation_status` if translation_requests found.
@@ -61,6 +61,19 @@ create_csv_translation_request(
   repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
   file_path: "example.csv",  # Specify the CSV file path under the git repo
   payload: example_csv_payload  # Specify the CSV payload
+) 
+```
+
+### 🔝rebase_csv_translation_request
+Rebase a translation request entry inside the CSV file. It will append a new row top of target branch in CSV file and then git commit the CSV file changes.
+
+``` ruby
+rebase_csv_translation_request(
+  repository_name: "crazymanish/example-csv-repo", # Specify the CSV git file repo
+  branch_name: "master", #Specify the target branch (default: master)
+  feature_branch_name: "some_feature_branch",  #Specify the feature branch name
+  file_path: "example.csv",  # Specify the CSV file path under the git repo
+  identifier: "PRJ-3030"  # Specify the CSV row identifier
 ) 
 ```
 
