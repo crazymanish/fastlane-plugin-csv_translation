@@ -10,20 +10,22 @@ module Fastlane
         return ".fl_clone_csv_file"
       end
 
+      def self.csv_file_directory_path
+        return File.join(Dir.pwd, self.csv_file_directory_name)
+      end
+
       def self.fetch_csv_file(params)
         repository_name = params[:repository_name]
         branch_name = params[:branch_name]
-        csv_file_directory_name = params[:directory_name] || self.csv_file_directory_name
 
         # Setup csv_file folder for fresh git clone.
-        git_clone_folder = File.join(Dir.pwd, csv_file_directory_name)
+        git_clone_folder = self.csv_file_directory_path
         FileUtils.rm_rf(git_clone_folder) if File.directory?(git_clone_folder)
-        Dir.mkdir(csv_file_directory_name)
+        Dir.mkdir(self.csv_file_directory_name)
 
         UI.success("Fetching csv file from git repo... ⏳")
-        branch_option = "--branch #{branch_name}" if branch_name != 'HEAD'
         git_url = "git@github.com:#{repository_name}"
-        Fastlane::Actions::sh("git clone #{git_url.shellescape} #{git_clone_folder.shellescape} --depth 1 -n #{branch_option}")
+        Fastlane::Actions::sh("git clone #{git_url.shellescape} #{git_clone_folder.shellescape}")
         Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git checkout #{branch_name}")
 
         return git_clone_folder
@@ -40,6 +42,18 @@ module Fastlane
         Fastlane::Actions::sh("cd #{git_clone_folder.shellescape} && git push -u origin #{branch_name}")
 
         return git_clone_folder
+      end
+
+      # add missing newline if not present, at the end of the file
+      def self.append_missing_eof(file_path)
+        File.open(file_path, "r+") do |file|
+          file.seek(-1, 2)
+
+          if file.read(1) != "\n"
+            file.write("\n")
+            file.seek(0)
+          end
+        end
       end
 
     end
