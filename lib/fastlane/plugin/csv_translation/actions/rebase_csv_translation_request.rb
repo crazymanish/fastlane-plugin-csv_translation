@@ -21,9 +21,8 @@ module Fastlane
         require 'csv'
 
         # picking translation request-identifier entry from the feature_branch csv file
-        translation_requests = CSV.table(csv_file_path, headers: true)
-        translation_requests = translation_requests.select { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
-        UI.important(translation_requests)
+        feature_branch_translation_requests = CSV.table(csv_file_path, headers: true)
+        feature_branch_translation_requests = feature_branch_translation_requests.select { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
 
         # rebasing CSV file
         git_commit_info = {}
@@ -32,7 +31,7 @@ module Fastlane
           sh("git fetch --all")
           sh("git checkout #{params[:branch_name]} -- #{params[:file_path]}")
 
-          # Step1: Commit csv file so rebase can be performed
+          # Step2: Commit csv file so rebase can be performed
           git_message = "Rebase translation request: identifier:\n#{csv_row_identifier}"
           GitCommitAction.run(path: ".", message: git_message)
 
@@ -43,11 +42,16 @@ module Fastlane
           Helper::CsvTranslationHelper.append_missing_eof(csv_file_path)
 
           # Step5: Append back feature branch translation_requests
-          UI.important(translation_requests)
+          all_translation_requests = CSV.table(csv_file_path, headers: true)
+          all_translation_requests.delete_if { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
+
           headers = CSV.open(csv_file_path, &:readline)
-          CSV.open(csv_file_path, "a", headers: headers, force_quotes: true) do |csv|
-            translation_requests.each { |translation_request| csv << translation_request }
+          CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
+            all_translation_requests.each { |translation_request| csv << translation_request }
+            feature_branch_translation_requests.each { |translation_request| csv << translation_request }
           end
+
+          # Step6: Commit and push to remote
           GitCommitAction.run(path: ".", message: git_message)
           PushToGitRemoteAction.run(remote: "origin", force: true)
 
