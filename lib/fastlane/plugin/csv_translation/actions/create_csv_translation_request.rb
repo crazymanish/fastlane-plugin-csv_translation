@@ -20,14 +20,7 @@ module Fastlane
         csv_payload = params[:payload]
 
         # add missing newline if not present, at the end of the file
-        File.open(csv_file_path, "r+") do |csv|
-          csv.seek(-1, 2)
-
-          if csv.read(1) != "\n"
-            csv.write("\n")
-            csv.seek(0)
-          end
-        end
+        Helper::CsvTranslationHelper.append_missing_eof(csv_file_path)
 
         # adding new entry into csv file
         require 'csv'

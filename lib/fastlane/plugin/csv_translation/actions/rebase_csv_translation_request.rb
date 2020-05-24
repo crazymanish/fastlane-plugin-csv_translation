@@ -31,32 +31,15 @@ module Fastlane
           sh("git fetch --all")
           sh("git checkout #{params[:branch_name]} -- #{params[:file_path]}")
 
-          # Step2: Commit csv file so rebase can be performed
-          git_message = "Rebase translation request: identifier:\n#{csv_row_identifier}"
-          GitCommitAction.run(path: ".", message: git_message)
+          # Validate: Do we really need to perfoem `rebase` ?
+          repo_status = Actions::sh("git status --porcelain")
+          repo_clean = repo_status.empty?
 
-          # Step3: Perfoms rebasing, take all changes from target branch
-          sh("git rebase -X theirs " + params[:branch_name])
-
-          # Step4: Add missing newline if not present, at the end of the file
-          Helper::CsvTranslationHelper.append_missing_eof(csv_file_path)
-
-          # Step5: Append back feature branch translation_requests
-          all_translation_requests = CSV.table(csv_file_path, headers: true)
-          all_translation_requests.delete_if { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
-
-          headers = CSV.open(csv_file_path, &:readline)
-          CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
-            all_translation_requests.each { |translation_request| csv << translation_request }
-            feature_branch_translation_requests.each { |translation_request| csv << translation_request }
+          if repo_clean
+            UI.important("Rebase is not required, CSV file is up to date! 💪")
+          else
+            git_commit_info = self.perform_rebase(params, csv_file_path, feature_branch_translation_requests)
           end
-
-          # Step6: Commit and push to remote
-          GitCommitAction.run(path: ".", message: git_message)
-          PushToGitRemoteAction.run(remote: "origin", force: true)
-
-          git_commit_info = Actions.last_git_commit_dict
-          UI.success("Successfully #{git_message} 🚀")
         end
 
         # building deleted translation request info
@@ -66,6 +49,37 @@ module Fastlane
 
         Actions.lane_context[SharedValues::REBASE_CSV_TRANSLATION_REQUEST_INFO] = rebase_translation_request_info
         return rebase_translation_request_info
+      end
+
+      def self.perform_rebase(params, csv_file_path, feature_branch_translation_requests)
+        csv_row_identifier = params[:identifier]
+
+        # Step2: Commit csv file so rebase can be performed
+        git_message = "Rebase translation request: identifier:\n#{csv_row_identifier}"
+        GitCommitAction.run(path: ".", message: git_message)
+
+        # Step3: Perfoms rebasing, take all changes from target branch
+        sh("git rebase -X theirs " + params[:branch_name])
+
+        # Step4: Add missing newline if not present, at the end of the file
+        Helper::CsvTranslationHelper.append_missing_eof(csv_file_path)
+
+        # Step5: Append back feature branch translation_requests
+        all_translation_requests = CSV.table(csv_file_path, headers: true)
+        all_translation_requests.delete_if { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
+
+        headers = CSV.open(csv_file_path, &:readline)
+        CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
+          all_translation_requests.each { |translation_request| csv << translation_request }
+          feature_branch_translation_requests.each { |translation_request| csv << translation_request }
+        end
+
+        # Step6: Commit and push to remote
+        GitCommitAction.run(path: ".", message: git_message)
+        PushToGitRemoteAction.run(remote: "origin", force: true)
+
+        UI.success("Successfully #{git_message} 🚀")
+        Actions.last_git_commit_dict
       end
 
       def self.description
