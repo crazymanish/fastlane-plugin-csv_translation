@@ -79,12 +79,12 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :branch_name,
                                        env_name: "FL_DELETE_CSV_TRANSLATION_REQUEST_BRANCH_NAME",
-                                       description: "The branch name to your repository, (default master)",
+                                       description: "The branch name to your repository, (default main)",
                                        is_string: true,
-                                       default_value: "master"),
+                                       default_value: "main"),
           FastlaneCore::ConfigItem.new(key: :feature_branch_name,
                                        env_name: "FL_DELETE_CSV_TRANSLATION_REQUEST_FEATURE_BRANCH_NAME",
-                                       description: "The feature branch name for new translation request (Useful if no direct commit allowed in master)",
+                                       description: "The feature branch name for new translation request (Useful if no direct commit allowed in main)",
                                        is_string: true,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :file_path,
@@ -110,7 +110,7 @@ module Fastlane
             identifier: "some_identifier_value")',
           'delete_csv_translation_request(
             repository_name: "fastlane/fastlane",
-            branch_name: "master",
+            branch_name: "main",
             file_path: "translation/some_csv_name.csv",
             identifier: "some_identifier_value")'
         ]
