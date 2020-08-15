@@ -66,9 +66,9 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :branch_name,
                                        env_name: "FL_GET_CSV_TRANSLATION_REQUESTS_BRANCH_NAME",
-                                       description: "The branch name to your repository, (default master)",
+                                       description: "The branch name to your repository, (default main)",
                                        is_string: true,
-                                       default_value: "master"),
+                                       default_value: "main"),
           FastlaneCore::ConfigItem.new(key: :file_path,
                                        env_name: "FL_GET_CSV_TRANSLATION_REQUESTS_FILE_PATH",
                                        description: "The file path to your csv file",
@@ -104,7 +104,7 @@ module Fastlane
             file_path: "translation/some_csv_name.csv")',
           'get_csv_translation_requests(
             repository_name: "fastlane/fastlane",
-            branch_name: "master",
+            branch_name: "main",
             file_path: "translation/some_csv_name.csv")'
         ]
       end

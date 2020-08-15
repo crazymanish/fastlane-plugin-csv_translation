@@ -45,7 +45,7 @@ module Fastlane
                                        default_value: "main"),
           FastlaneCore::ConfigItem.new(key: :feature_branch_name,
                                        env_name: "FL_CREATE_CSV_FEATURE_BRANCH_NAME",
-                                       description: "The feature branch name for new translation request (Useful if no direct commit allowed in master)",
+                                       description: "The feature branch name for new translation request (Useful if no direct commit allowed in main)",
                                        is_string: true,
                                        optional: true)
         ]
@@ -62,7 +62,7 @@ module Fastlane
             feature_branch_name: "some_feature_branch_name")',
           'create_csv_feature_branch(
             repository_name: "fastlane/fastlane",
-            branch_name: "master",
+            branch_name: "main",
             feature_branch_name: "some_feature_branch_name")'
         ]
       end
