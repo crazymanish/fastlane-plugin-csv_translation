@@ -56,6 +56,7 @@ module Fastlane
 
       def self.perform_rebase(params, csv_file_path, feature_branch_translation_requests)
         csv_row_identifier = params[:identifier]
+        csv_row_identifier_header = params[:identifier_header]
 
         # Step2: Commit csv file so rebase can be performed
         git_message = "Rebase translation request: identifier:\n#{csv_row_identifier}"
@@ -68,7 +69,10 @@ module Fastlane
         Helper::CsvTranslationHelper.append_missing_eof(csv_file_path)
 
         # Step5: Append back feature branch translation_requests
-        all_translation_requests = CSV.table(csv_file_path, headers: true)
+        all_translation_requests = CSV.foreach(csv_file_path, headers: true).map { |row| row.to_h }
+        all_translation_requests.delete_if do |translation_request|
+          translation_request[csv_row_identifier_header].eql?(csv_row_identifier)
+        end
 
         headers = CSV.open(csv_file_path, &:readline)
         CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
