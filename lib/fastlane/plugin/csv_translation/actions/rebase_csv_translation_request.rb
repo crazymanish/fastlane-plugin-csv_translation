@@ -17,12 +17,15 @@ module Fastlane
 
         csv_file_path = "#{csv_file_folder}/#{params[:file_path]}"
         csv_row_identifier = params[:identifier]
+        csv_row_identifier_header = params[:identifier_header]
 
         require 'csv'
 
         # picking translation request-identifier entry from the feature_branch csv file
-        feature_branch_translation_requests = CSV.table(csv_file_path, headers: true)
-        feature_branch_translation_requests = feature_branch_translation_requests.select { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
+        feature_branch_translation_requests = CSV.foreach(csv_file_path, headers: true).map { |row| row.to_h }
+        feature_branch_translation_requests = feature_branch_translation_requests.select do |translation_request|
+            translation_request[csv_row_identifier_header].eql?(csv_row_identifier)
+        end
 
         # rebasing CSV file
         git_commit_info = {}
@@ -66,7 +69,6 @@ module Fastlane
 
         # Step5: Append back feature branch translation_requests
         all_translation_requests = CSV.table(csv_file_path, headers: true)
-        all_translation_requests.delete_if { |row| row.map { |value| value.to_s }.join("").include?(csv_row_identifier) }
 
         headers = CSV.open(csv_file_path, &:readline)
         CSV.open(csv_file_path, "w", write_headers: true, headers: headers, force_quotes: true) do |csv|
@@ -113,6 +115,12 @@ module Fastlane
                                        env_name: "FL_REBASE_CSV_TRANSLATION_REQUEST_FILE_PATH",
                                        description: "The file path to your csv file",
                                        is_string: true),
+          FastlaneCore::ConfigItem.new(key: :identifier_header,
+                                       env_name: "FL_REBASE_CSV_TRANSLATION_REQUEST_IDENTIFIER_HEADER",
+                                       description: "An identifier header(column name) of the CSV file",
+                                       is_string: true,
+                                       optional: true,
+                                       default_value: "Ticket"),
           FastlaneCore::ConfigItem.new(key: :identifier,
                                        env_name: "FL_REBASE_CSV_TRANSLATION_REQUEST_IDENTIFIER",
                                        description: "An identifier value of the CSV file row",
