@@ -11,8 +11,8 @@ module Fastlane
       def self.run(params)
         # fetching csv file
         csv_file_folder = Helper::CsvTranslationHelper.fetch_csv_file(
-          repository_name: repository_name,
-          branch_name: branch_name
+          repository_name: params[:repository_name],
+          branch_name: params[:branch_name]
         )
 
         Actions.lane_context[SharedValues::CREATE_CSV_FEATURE_BRANCH_INFO] = csv_file_folder
